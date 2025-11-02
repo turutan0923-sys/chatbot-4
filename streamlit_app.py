@@ -25,7 +25,13 @@ if st.button("おすすめのがん検診を表示"):
     recs = recommend_cancer_screenings(age, gender)
     if recs:
         st.write(f"**{age}歳・{gender}に推奨されるがん検診**")
-        for r in recs:
-            st.write(f"- {r}")
+        checked = []
+        for i, r in enumerate(recs):
+            checked.append(st.checkbox(f"{r} を受けましたか？", key=f"chk_{i}"))
+        count = sum(checked)
+        if count > 0:
+            st.write(f"🏅×{count}（{count}個の健診を受けました！）")
+        else:
+            st.write("まだ受けた健診がありません。")
     else:
         st.write("該当する推奨がん検診はありません。")
