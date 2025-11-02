@@ -2,7 +2,7 @@ import streamlit as st
 
 st.title("あなたに合ったがん検診案内チャットボット")
 
-st.write("年齢と性別を入力してください。あなたに推奨されるがん検診を表示します。")
+st.write("年齢と性別を入力してください。あなたに推奨されるがん検診をチャット形式でご案内します。")
 
 def recommend_cancer_screenings(age, gender):
     recommendations = []
@@ -21,17 +21,26 @@ def recommend_cancer_screenings(age, gender):
 age = st.number_input("年齢を入力してください", min_value=0, max_value=120, value=40)
 gender = st.selectbox("性別を選択してください", ["男性", "女性"])
 
-if st.button("おすすめのがん検診を表示"):
+if st.button("チャットボットに質問"):
     recs = recommend_cancer_screenings(age, gender)
+    with st.chat_message("user"):
+        st.write(f"私は{age}歳・{gender}です。どんながん検診を受ければいいですか？")
+    with st.chat_message("assistant"):
+        if recs:
+            st.write("厚生労働省の推奨に基づき、あなたには以下のがん検診をおすすめします：")
+            for r in recs:
+                st.write(f"- {r}")
+        else:
+            st.write("現時点で推奨されるがん検診はありません。")
+
+    # 2. 推奨された検診にチェックボックス
     if recs:
-        st.write(f"**{age}歳・{gender}に推奨されるがん検診**")
+        st.write("---")
+        st.write(f"**{age}歳・{gender}に推奨されるがん検診受診チェック**")
         checked = []
         for i, r in enumerate(recs):
             checked.append(st.checkbox(f"{r} を受けましたか？", key=f"chk_{i}"))
+        # 3. カウント
         count = sum(checked)
-        if count > 0:
-            st.write(f"🏅×{count}（{count}個の健診を受けました！）")
-        else:
-            st.write("まだ受けた健診がありません。")
-    else:
-        st.write("該当する推奨がん検診はありません。")
+        # 4. 金メダル表示
+        st.write(f"🏅 × {count}（{count}個の健診を受けました！）" if count > 0 else "まだ受けた健診がありません。")
