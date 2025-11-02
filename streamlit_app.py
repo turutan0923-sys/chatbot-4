@@ -1,30 +1,9 @@
 import streamlit as st
 
-st.title("あなたに合ったがん検診案内")
+st.title("あなたに合ったがん検診案内チャットボット")
 
-st.markdown("### 元気でにこにこしている、さまざまな年代の男女")
-# イラスト画像のリスト（パスまたはURL）
-images = [
-    "images/kids.png",
-    "images/young_adult.png",
-    "images/middle_age.png",
-    "images/senior.png"
-]
-captions = [
-    "元気な子ども",
-    "若い男性と女性",
-    "中年の男女",
-    "高齢の男女"
-]
+st.write("年齢と性別を入力してください。あなたに推奨されるがん検診を表示します。")
 
-# 横並びで画像を表示
-cols = st.columns(len(images))
-for i, (img, cap) in enumerate(zip(images, captions)):
-    with cols[i]:
-        st.image(img, caption=cap, use_column_width=True)
-
-st.write("---")
-# ↓がん検診の案内・入力フォーム（前回例の流用）
 def recommend_cancer_screenings(age, gender):
     recommendations = []
     if age >= 50:
