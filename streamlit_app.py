@@ -33,14 +33,16 @@ if st.button("チャットボットに質問"):
         else:
             st.write("現時点で推奨されるがん検診はありません。")
 
-    # 2. 推奨された検診にチェックボックス
+    # チェックボックスの状態をsession_stateで管理
     if recs:
         st.write("---")
         st.write(f"**{age}歳・{gender}に推奨されるがん検診受診チェック**")
         checked = []
         for i, r in enumerate(recs):
-            checked.append(st.checkbox(f"{r} を受けましたか？", key=f"chk_{i}"))
-        # 3. カウント
+            key = f"chk_{age}_{gender}_{i}"
+            # チェックボックスの値をsession_stateで管理（初期値はFalse）
+            if key not in st.session_state:
+                st.session_state[key] = False
+            checked.append(st.checkbox(f"{r} を受けましたか？", key=key))
         count = sum(checked)
-        # 4. 金メダル表示
         st.write(f"🏅 × {count}（{count}個の健診を受けました！）" if count > 0 else "まだ受けた健診がありません。")
